@@ -1,20 +1,22 @@
 import axios from 'axios';
 
-interface DiscordEmbed {
+export interface DiscordEmbed {
   title: string;
-  description: string;
   url?: string;
   color?: number;
+	timestamp?: string; 
   image?: { url: string };
+  footer?: { text: string; icon_url?: string };
 }
 
-interface WebhookPayload {
+export interface WebhookPayload {
   content: string;
   embeds?: DiscordEmbed[];
 }
 
 export const sendDiscordNotification = async (payload: WebhookPayload): Promise<void> => {
-  const WEBHOOK_URL: string = import.meta.env.VITE_DISCORD_WEBHOOK_URL;
+  const WEBHOOK_URL: string = 
+    (import.meta.env?.VITE_DISCORD_WEBHOOK_URL) || (process.env.VITE_DISCORD_WEBHOOK_URL as string);
 
   try {
     await axios.post(WEBHOOK_URL, payload);
